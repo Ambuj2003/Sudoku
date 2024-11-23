@@ -1,13 +1,13 @@
 import { Sudoku } from './suduko_board.js';
-
+let prev=40;
 document.addEventListener("DOMContentLoaded", function () { // ensure all html is loading only afetr that js code is implemented
 
     const container = document.getElementById("sudokuContainer");  // acces my suduko coantienr from main div so i can make grid
 
     // Function to generate a random Sudoku puzzle
-    function generateRandomSudoku() {
+    function generateRandomSudoku(k) {
 
-        let sudokumaker = new Sudoku(9, 40);
+        let sudokumaker = new Sudoku(9, k);
         sudokumaker.fillValues();
         // console.log(sudokumaker.mat);
         
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () { // ensure all html i
     }
 
     // Initialize puzzle
-    let initialPuzzle = generateRandomSudoku();
+    let initialPuzzle = generateRandomSudoku(30);
     let puzzle = JSON.parse(JSON.stringify(initialPuzzle));
     let solvedPuzzle = [];
 
@@ -116,19 +116,38 @@ document.addEventListener("DOMContentLoaded", function () { // ensure all html i
     }
 
     // Function to reset the puzzle
-    function resetPuzzle() {
-        initialPuzzle = generateRandomSudoku();
+    function resetPuzzle(val=30) {
+        initialPuzzle = generateRandomSudoku(val);
         puzzle = JSON.parse(JSON.stringify(initialPuzzle));
         solvedPuzzle = [];
         createSudokuGrid(puzzle);
     }
 
+    function easy(){
+        prev=20;
+        resetPuzzle(20);
+    }
+    function medium(){
+        prev=30;
+        resetPuzzle(30);
+    }
+    function hard(){
+        prev=40;
+        resetPuzzle(40);
+    }
     // Initial puzzle creation
     createSudokuGrid(puzzle);
 
     // Attach event listeners to buttons
+    document.getElementById("easy")
+        .addEventListener("click", easy);
+    document.getElementById("medium")
+        .addEventListener("click", medium);
+    document.getElementById("hard")
+        .addEventListener("click", hard);
+
     document.getElementById("solveButton")
         .addEventListener("click", solvePuzzle);
     document.getElementById("resetButton")
-        .addEventListener("click", resetPuzzle);
+        .addEventListener("click", ()=>resetPuzzle(prev));
 });
